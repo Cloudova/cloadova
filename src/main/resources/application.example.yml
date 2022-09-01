@@ -1,0 +1,20 @@
+app: "cloud"
+jwt:
+  secret: "secret"
+spring:
+  mail:
+    host: "smtp.gmail.com"
+    port: 587
+    username: "secret"
+    password: "secret"
+    smtp:
+      auth: true
+      starttls: true
+  datasource:
+    url: "jdbc:mysql://localhost:3306/cloudova"
+    username: "root"
+    password: "ee35jeCAMqAgtdC7"
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
