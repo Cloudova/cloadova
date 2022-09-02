@@ -17,4 +17,7 @@ public class TransactionalMessagingService {
     public void sendTransactionalMessage(String to, String title, String message) {
         this.matcher.match(to).sendMessage(to, title, message);
     }
+    public void sendVerification(String to, String code) {
+        this.sendTransactionalMessage(to,"","Your Verification Code is: " + code);
+    }
 }

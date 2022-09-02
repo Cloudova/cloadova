@@ -1,0 +1,30 @@
+app: "cloud"
+
+jwt:
+  secret: "secret"
+mail-service:
+  default-email: "sorooshtanzadeh@outlook.com"
+spring:
+  mail:
+    password: springboot
+    username: duke
+    host: 127.0.0.1
+    port: 3025 # default protocol port + 3000 as offset
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: false
+            required: false
+  datasource:
+    url: "jdbc:h2:mem:cloudova"
+    username: "sa"
+    password: "password"
+    driverClassName: org.h2.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
