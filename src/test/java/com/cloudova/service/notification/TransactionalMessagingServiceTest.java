@@ -38,7 +38,7 @@ class TransactionalMessagingServiceTest extends BaseTest {
                 emailBody);
         Awaitility.await().atMost(10, SECONDS).untilAsserted(() -> {
             MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
-            MimeMessage receivedMessage = receivedMessages[0];
+            MimeMessage receivedMessage = receivedMessages[receivedMessages.length - 1];
             assertEquals(emailBody, GreenMailUtil.getBody(receivedMessage));
             assertEquals(1, receivedMessage.getAllRecipients().length);
             assertEquals(emailAddress, receivedMessage.getAllRecipients()[0].toString());
@@ -52,7 +52,7 @@ class TransactionalMessagingServiceTest extends BaseTest {
         this.service.sendVerification(emailAddress, emailBody);
         Awaitility.await().atMost(10, SECONDS).untilAsserted(() -> {
             MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
-            MimeMessage receivedMessage = receivedMessages[0];
+            MimeMessage receivedMessage = receivedMessages[receivedMessages.length - 1];
             assertEquals("Your Verification Code is: " + emailBody, GreenMailUtil.getBody(receivedMessage));
             assertEquals(1, receivedMessage.getAllRecipients().length);
             assertEquals(emailAddress, receivedMessage.getAllRecipients()[0].toString());
