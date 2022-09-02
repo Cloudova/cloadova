@@ -1,8 +1,7 @@
 package com.cloudova.service.user;
 
+import com.cloudova.service.notification.TransactionalMessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -10,18 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class TestController {
 
     @Autowired
-    private JavaMailSender emailSender;
+    private TransactionalMessagingService messagingService;
 
     @GetMapping("/test")
-    public String test(){
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("info@soroosh-tanzadeh.ir");
-        message.setTo("soroosh081@gmail.com");
-        message.setSubject("test");
-        message.setText("Hi Soroosh");
-
-        emailSender.send(message);
-
+    public String test() {
+        this.messagingService.sendTransactionalMessage("soroosh081@gmail.com", "Email Verification", "Your Verification Code is: 22054");
+        this.messagingService.sendTransactionalMessage("+989378936669", "Email Verification", "Your Verification Code is: 22054");
         return "OK";
     }
 
