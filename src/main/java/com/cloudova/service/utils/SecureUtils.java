@@ -16,6 +16,23 @@ public class SecureUtils {
         return sb.toString();
     }
 
+    public static String generateRandomNumber(int len, Predicate<String> predicate) {
+        final String chars = "1234567890";
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+            int randomIndex = random.nextInt(chars.length());
+            sb.append(chars.charAt(randomIndex));
+        }
+
+        String token = sb.toString();
+        if (predicate.test(token)) {
+            return token;
+        } else {
+            return generateRandomString(len, predicate);
+        }
+    }
+
     public static String generateRandomString(int len, Predicate<String> predicate) {
         final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         SecureRandom random = new SecureRandom();

@@ -21,7 +21,6 @@ public class AuthenticationTokenService {
     private final AuthenticationTokenRepository repository;
     private final UserService userService;
 
-
     @Autowired
     public AuthenticationTokenService(AuthenticationTokenRepository repository, UserService userService) {
         this.repository = repository;

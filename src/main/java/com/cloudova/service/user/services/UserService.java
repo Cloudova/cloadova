@@ -30,7 +30,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(String code, String identifier, UserDto userDto) {
-        this.otpService.verifyOTP(code, identifier);
+        this.otpService.verifyOTP(identifier, code);
         User.UserBuilder builder = User.builder();
         if (userDto.email() != null) {
             builder = builder.email(identifier);

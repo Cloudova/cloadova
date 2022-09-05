@@ -23,14 +23,14 @@ public class OTPService {
     }
 
     public UUID SendOtp(String to) {
-        String code = SecureUtils.generateRandomString(8, (str) -> !this.repository.existsByToken(str));
-        OTP otp = this.repository.save(OTP.builder().identifier(to).token(code).build());
-        this.messagingService.sendTransactionalMessage(to, "Verification Code", code);
-        return otp.getId();
+        String code = SecureUtils.generateRandomNumber(8, (str) -> !this.repository.existsByToken(str));
+        OTP otp = this.repository.saveAndFlush(OTP.builder().identifier(to).token(code).build());
+        this.messagingService.sendVerification(to, code);
+        return otp.getVerificationToken();
     }
 
     public void verifyOTP(String identifier, String code) {
-        OTP otp = this.repository.findByTokenAndIdentifier(code, identifier).orElseThrow(() -> new InvalidOtpException("Otp Code is not valid"));
+        OTP otp = this.repository.findByTokenAndIdentifier(code, identifier).orElseThrow(() -> new InvalidOtpException("Otp Code is not valid: " + code));
         otp.verify();
         this.repository.save(otp);
     }
