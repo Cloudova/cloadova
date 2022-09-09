@@ -1,17 +1,19 @@
 package com.cloudova.service.user.models;
 
 import com.cloudova.service.config.BaseModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -21,7 +23,7 @@ import java.util.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseModel implements UserDetails{
+public class User extends BaseModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -43,10 +45,12 @@ public class User extends BaseModel implements UserDetails{
     private Role role;
 
     @Column
-    private boolean isActive;
+    @Builder.Default
+    private boolean isActive = true;
 
     @Column
-    private boolean banned;
+    @Builder.Default
+    private boolean banned = false;
 
     @Column
     private String password;
@@ -60,15 +64,15 @@ public class User extends BaseModel implements UserDetails{
     }
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return this.password;
     }
 
     @Override
     public String getUsername() {
-        return this.mobile;
+        return this.email != null ? this.email : this.mobile;
     }
-
 
     public String getName() {
         return this.firstName + " " + this.lastName;

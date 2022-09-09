@@ -60,6 +60,7 @@ public class JWTService {
 
     public String generateToken(User userDetails) {
         AuthenticationToken refreshToken = this.accessTokenService.createAuthenticationToken(userDetails);
+        System.out.println("Values: " + userDetails.toHashMap().values());
         return JWT.create()
                 .withIssuer(this.appName)
                 .withSubject(String.valueOf(userDetails.getId()))

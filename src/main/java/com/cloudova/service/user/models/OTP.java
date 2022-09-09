@@ -1,6 +1,7 @@
 package com.cloudova.service.user.models;
 
 import com.cloudova.service.config.BaseModel;
+import com.cloudova.service.user.exceptions.InvalidOtpException;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -66,6 +67,9 @@ public class OTP extends BaseModel {
     }
 
     public void verify() {
+        if (this.isVerified) {
+            throw new InvalidOtpException("Invalid otp");
+        }
         this.setVerified(true);
         this.setVerifiedAt(Timestamp.valueOf(LocalDateTime.now()));
     }

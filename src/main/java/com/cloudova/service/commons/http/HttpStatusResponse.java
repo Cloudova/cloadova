@@ -1,5 +1,8 @@
 package com.cloudova.service.commons.http;
 
+import lombok.Data;
+
+@Data
 public class HttpStatusResponse<T> {
     private boolean status;
     private String message;

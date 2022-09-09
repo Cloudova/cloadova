@@ -7,7 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EMailService implements TransactionalMessagingAdapter {
+public class EmailService implements TransactionalMessagingAdapter {
 
     private final JavaMailSender sender;
 
@@ -15,7 +15,7 @@ public class EMailService implements TransactionalMessagingAdapter {
     private String defaultEmail;
 
     @Autowired
-    public EMailService(JavaMailSender sender) {
+    public EmailService(JavaMailSender sender) {
         this.sender = sender;
     }
 

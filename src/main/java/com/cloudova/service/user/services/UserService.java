@@ -1,5 +1,6 @@
 package com.cloudova.service.user.services;
 
+import com.cloudova.service.user.models.Role;
 import com.cloudova.service.user.models.User;
 import com.cloudova.service.user.models.UserDto;
 import com.cloudova.service.user.repositories.UserRepository;
@@ -31,7 +32,7 @@ public class UserService implements UserDetailsService {
 
     public User createUser(String code, String identifier, UserDto userDto) {
         this.otpService.verifyOTP(identifier, code);
-        User.UserBuilder builder = User.builder();
+        User.UserBuilder builder = User.builder().role(Role.USER);
         if (userDto.email() != null) {
             builder = builder.email(identifier);
         } else {
@@ -45,7 +46,16 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.repository.findByMobileOrEmail(username, username).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+        return this.findUserByEmailOrMobile(username);
     }
+
+    public User findUserByEmailOrMobile(String mobileOrEmail) throws UsernameNotFoundException {
+        return this.repository.findByMobileOrEmail(mobileOrEmail, mobileOrEmail).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+    }
+
+    public boolean validateCredentials(UserDetails user, String password) {
+        return this.passwordEncoder.matches(password, user.getPassword());
+    }
+
 }
 
