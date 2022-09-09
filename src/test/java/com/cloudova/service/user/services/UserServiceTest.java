@@ -20,8 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import javax.mail.internet.MimeMessage;
 
-import java.util.UUID;
-
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -41,7 +39,7 @@ class UserServiceTest extends BaseTest {
     @Test
     void test_create_user() {
         String email = this.faker.internet().emailAddress();
-        UUID otpUid = this.otpService.SendOtp(email);
+        this.otpService.SendOtp(email);
         Awaitility.await().atMost(1, SECONDS).until(() -> {
             MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
             MimeMessage receivedMessage = receivedMessages[receivedMessages.length - 1];
@@ -55,7 +53,7 @@ class UserServiceTest extends BaseTest {
                     this.faker.internet().password()
             ));
             UserDetails userDetails = this.userService.loadUserByUsername(email);
-            Assertions.assertSame(user.getUsername(), userDetails.getUsername());
+            Assertions.assertEquals(user.getUsername(), userDetails.getUsername());
             return true;
         });
     }

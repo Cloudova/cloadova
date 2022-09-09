@@ -6,15 +6,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
 
     private final JWTAuthenticationEntryPoint authenticationEntryPoint;
+    private final AuthenticationFilter authenticationFilter;
 
     @Autowired
-    public SecurityConfig(JWTAuthenticationEntryPoint authenticationEntryPoint) {
+    public SecurityConfig(JWTAuthenticationEntryPoint authenticationEntryPoint, AuthenticationFilter authenticationFilter) {
         this.authenticationEntryPoint = authenticationEntryPoint;
+        this.authenticationFilter = authenticationFilter;
     }
 
     @Bean
@@ -26,7 +29,7 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/***").authenticated()
                 .antMatchers("/api/v1/auth/login").permitAll()
                 .antMatchers("/api/v1/user/register").permitAll()
-                .antMatchers("/","/assets/***").permitAll()
+                .antMatchers("/", "/assets/***").permitAll()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(this.authenticationEntryPoint)
@@ -34,6 +37,7 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
