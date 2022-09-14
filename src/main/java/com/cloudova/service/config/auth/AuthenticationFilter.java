@@ -2,21 +2,24 @@ package com.cloudova.service.config.auth;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.cloudova.service.jwt.services.JWTService;
+import com.cloudova.service.user.models.User;
 import com.cloudova.service.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
 
-@WebFilter
 @Component
-public class AuthenticationFilter implements Filter {
+public class AuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
     private final UserService userService;
@@ -27,21 +30,31 @@ public class AuthenticationFilter implements Filter {
         this.userService = userService;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        if (httpServletRequest.getHeader("Authorization") != null) {
-            try {
-                String jwtToken = httpServletRequest.getHeader("Authorization").replace("Bearer ", "");
-                System.out.println(jwtToken);
-                DecodedJWT decodedJWT = this.jwtService.validateJWT(jwtToken);
-                String username = decodedJWT.getClaim("preferred_username").asString();
-                UserDetails userDetails = this.userService.loadUserByUsername(username);
-                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, jwtToken));
-            } catch (Exception ex) {
-                // Nothing
-            }
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeaderIsInvalid(authorizationHeader)) {
+            filterChain.doFilter(request, response);
+            return;
         }
+        UsernamePasswordAuthenticationToken token = createToken(authorizationHeader);
+        SecurityContextHolder.getContext().setAuthentication(token);
         filterChain.doFilter(request, response);
     }
+
+    private boolean authorizationHeaderIsInvalid(String authorizationHeader) {
+        return authorizationHeader == null
+                || !authorizationHeader.startsWith("Bearer ");
+    }
+
+    private UsernamePasswordAuthenticationToken createToken(String authorizationHeader) {
+        String token = authorizationHeader.replace("Bearer ", "");
+        DecodedJWT decodedJWT = this.jwtService.validateJWT(token);
+        String username = decodedJWT.getClaim("preferred_username").asString();
+        User user = this.userService.findByUsername(username);
+        Collection<GrantedAuthority> authorities = user.getAuthorities();
+        return new UsernamePasswordAuthenticationToken(user, null, authorities);
+    }
+
 }
