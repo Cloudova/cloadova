@@ -1,6 +1,7 @@
 package com.cloudova.service.project.models;
 
 import com.cloudova.service.user.models.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -34,11 +35,13 @@ public class Application {
 
     @JoinColumn
     @OneToOne
+    @JsonIgnore
     private User user;
 
     @JoinColumn(name = "application_id")
     @OneToMany(fetch = FetchType.LAZY)
     @ToString.Exclude
+    @JsonIgnore
     private Set<ApplicationUser> users;
 
     @Override
