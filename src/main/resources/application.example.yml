@@ -1,8 +1,8 @@
 app: "cloud"
 restrictions:
-  max-app-for-user: 3
-  max-user-for-app: 100
-  storage-limit: "150Mb"
+  max_app_for_user: 3
+  max_user_for_app: 100
+  storage_limit: "150Mb"
 jwt:
   secret: "secret"
 mail-service:

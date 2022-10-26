@@ -10,6 +10,7 @@ import com.cloudova.service.user.http.resources.OtpSent;
 import com.cloudova.service.user.models.User;
 import com.cloudova.service.user.services.UserService;
 import com.cloudova.service.user.services.otp.OTPService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 @RequestMapping("/api/v1/auth")
 @RestController
+@Tag(name = "Authentication", description = "Authentication endpoints")
 public class AuthenticationController {
 
     private final OTPService otpService;

@@ -1,0 +1,8 @@
+FROM openjdk:17-jdk AS build
+
+WORKDIR /app
+
+COPY . /app
+RUN ./mvnw  -Dmaven.test.skip package
+
+EXPOSE 80

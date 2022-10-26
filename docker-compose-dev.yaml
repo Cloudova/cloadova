@@ -1,0 +1,37 @@
+version: "3.0"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ".:/app:rw"
+    ports:
+      - "8080:8080"
+      - "35729:35729"
+    entrypoint: "sleep 1d"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/cloudova"
+      SPRING_DATASOURCE_USERNAME: "cloudova"
+      SPRING_DATASOURCE_PASSWORD: "example"
+      SPRING_DATASOURCE_driverClassName: "com.mysql.cj.jdbc.Driver"
+    depends_on:
+      - db
+      - redis
+  redis:
+    image: redis
+    restart: always
+  db:
+    image: mysql
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_USER: cloudova
+      MYSQL_PASSWORD: example
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: cloudova
+
+volumes:
+  db: {}

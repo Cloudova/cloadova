@@ -7,6 +7,7 @@ import com.cloudova.service.project.services.ApplicationService;
 import com.cloudova.service.user.models.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
+@Tag(name = "Application", description = "create, delete and update applications")
 @RequestMapping("/api/v1/applications")
 public class ApplicationController {
 
@@ -28,7 +30,7 @@ public class ApplicationController {
     }
 
     @PostMapping
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")}, summary = "Create new application")
     public HttpStatusResponse<Application> createNewApplication(@Validated @RequestBody CreateApplicationRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Application application = this.applicationService.createApplication(user, request.name(), request.subdomain(), request.description());
