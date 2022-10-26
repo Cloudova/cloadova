@@ -5,7 +5,6 @@ import com.cloudova.service.jwt.services.JWTService;
 import com.cloudova.service.user.http.requests.CreateUserRequest;
 import com.cloudova.service.user.http.requests.LoginRequest;
 import com.cloudova.service.user.http.requests.SendOtpRequest;
-import com.cloudova.service.user.http.requests.VerifyOtpRequest;
 import com.cloudova.service.user.http.resources.OtpSent;
 import com.cloudova.service.user.models.User;
 import com.cloudova.service.user.services.UserService;
@@ -57,11 +56,11 @@ public class AuthenticationController {
         return new HttpStatusResponse<>(true);
     }
 
-    @PostMapping("/otp/verify")
-    public HttpStatusResponse<String> verifyOtp(@Validated @RequestBody VerifyOtpRequest request) {
-        this.otpService.verifyOTP(request.identifier(), request.code());
-        return new HttpStatusResponse<>(true, null);
-    }
+//    @PostMapping("/otp/verify")
+//    public HttpStatusResponse<String> verifyOtp(@Validated @RequestBody VerifyOtpRequest request) {
+//        this.otpService.verifyOTP(request.identifier(), request.code());
+//        return new HttpStatusResponse<>(true, null);
+//    }
 
 
 }

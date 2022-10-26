@@ -7,6 +7,8 @@ import com.cloudova.service.project.repositories.ApplicationRepository;
 import com.cloudova.service.user.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings("unused")
@@ -29,6 +31,10 @@ public class ApplicationService {
 
     public Application createApplication(User user, String name, String subdomain) {
         return this.createApplication(user, name, subdomain, null);
+    }
+
+    public Page<Application> list(Long id, Pageable pageable) {
+        return this.repository.findByUserId(id, pageable);
     }
 
     public Application createApplication(User user, String name, String subdomain, String description) {

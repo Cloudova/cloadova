@@ -38,8 +38,13 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        UsernamePasswordAuthenticationToken token = createToken(authorizationHeader);
-        SecurityContextHolder.getContext().setAuthentication(token);
+        try {
+            UsernamePasswordAuthenticationToken token = createToken(authorizationHeader);
+            SecurityContextHolder.getContext().setAuthentication(token);
+
+        } catch (com.auth0.jwt.exceptions.JWTDecodeException ex) {
+            // Nothing
+        }
         filterChain.doFilter(request, response);
     }
 
@@ -54,7 +59,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         String username = decodedJWT.getClaim("preferred_username").asString();
         User user = this.userService.findByUsername(username);
         Collection<GrantedAuthority> authorities = user.getAuthorities();
-        return new UsernamePasswordAuthenticationToken(user, null, authorities);
+        return new UsernamePasswordAuthenticationToken(user, token, authorities);
     }
 
 }
