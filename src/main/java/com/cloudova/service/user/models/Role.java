@@ -15,13 +15,12 @@ public enum Role {
             "activate:user",
             "create:project",
             "disable:project",
-            "delete_project",
-            "*"
+            "delete:project"
     ), USER(
             "ROLE_USER",
-            "create:project",
-            "delete:project",
-            "update_project"
+            "create:application",
+            "delete:application",
+            "update:application"
     );
 
     private final String[] authorities;

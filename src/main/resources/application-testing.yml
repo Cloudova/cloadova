@@ -19,9 +19,11 @@ spring:
             enable: false
             required: false
   datasource:
-    url: "jdbc:mysql://localhost:3306/cloudova"
-    username: "root"
-    password: "ee35jeCAMqAgtdC7"
+    url: "jdbc:h2:mem:testdb"
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+
   jpa:
     spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true

@@ -2,6 +2,7 @@ package com.cloudova.service.project.services;
 
 import com.cloudova.service.commons.exceptions.InvalidArgumentException;
 import com.cloudova.service.commons.exceptions.LimitExceedException;
+import com.cloudova.service.project.dto.ApplicationDto;
 import com.cloudova.service.project.models.Application;
 import com.cloudova.service.project.repositories.ApplicationRepository;
 import com.cloudova.service.user.models.User;
@@ -9,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @SuppressWarnings("unused")
 @Service
@@ -37,6 +41,25 @@ public class ApplicationService {
         return this.repository.findByUserId(id, pageable);
     }
 
+    @PreAuthorize("#application.user.id == authentication.principal.id")
+    public void deleteApplication(Application application) {
+        this.repository.delete(application);
+    }
+
+    @PreAuthorize("#application.user.id == authentication.principal.id")
+    public void updateApplication(Application application, ApplicationDto dto) {
+        System.out.println(application.getUser().getId());
+        if (!dto.subdomain().equals(application.getSubdomain()) && this.repository.existsBySubdomain(dto.subdomain())) {
+            throw new InvalidArgumentException("Entered subdomain is taken");
+        }
+
+        application.setName(dto.name());
+        application.setDescription(dto.description());
+        application.setSubdomain(dto.subdomain());
+        this.repository.save(application);
+    }
+
+
     public Application createApplication(User user, String name, String subdomain, String description) {
         if (this.repository.countByUser_Id(user.getId()) >= this.maxAppForUser) {
             throw new LimitExceedException("You can't create more than %d applications".formatted(this.maxAppForUser));
@@ -53,5 +76,9 @@ public class ApplicationService {
                 .build();
 
         return this.repository.save(application);
+    }
+
+    public Optional<Application> getById(long id) {
+        return this.repository.findById(id);
     }
 }

@@ -13,4 +13,6 @@ public interface ApplicationRepository extends PagingAndSortingRepository<Applic
 
     Page<Application> findByUserId(Long id, Pageable pageable);
 
+
+
 }

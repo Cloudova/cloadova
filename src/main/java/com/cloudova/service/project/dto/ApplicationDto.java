@@ -1,8 +1,8 @@
-package com.cloudova.service.project.http.requests;
+package com.cloudova.service.project.dto;
 
 import javax.validation.constraints.NotEmpty;
 
-public record CreateApplicationRequest(
+public record ApplicationDto(
         @NotEmpty
         String name,
         @NotEmpty

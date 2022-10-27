@@ -1,5 +1,6 @@
 package com.cloudova.service;
 
+import com.cloudova.service.jwt.services.JWTService;
 import com.cloudova.service.user.models.User;
 import com.cloudova.service.user.models.UserDto;
 import com.cloudova.service.user.services.UserService;
@@ -29,6 +30,10 @@ public class UserRequiredTest extends BaseTest{
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JWTService jWTService;
+
+    protected String token;
     protected User user;
 
     @BeforeEach
@@ -47,6 +52,7 @@ public class UserRequiredTest extends BaseTest{
                     null,
                     this.faker.internet().password()
             ));
+            this.token = this.jWTService.generateToken(this.user);
             return true;
         });
     }
