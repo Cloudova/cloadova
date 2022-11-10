@@ -7,12 +7,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ApplicationRepository extends PagingAndSortingRepository<Application, Long> {
+public interface ApplicationRepository extends PagingAndSortingRepository<Application, String> {
     boolean existsBySubdomain(String subdomain);
     long countByUser_Id(Long id);
 
     Page<Application> findByUserId(Long id, Pageable pageable);
-
-
-
 }

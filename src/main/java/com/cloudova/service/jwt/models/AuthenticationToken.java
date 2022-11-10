@@ -1,6 +1,6 @@
 package com.cloudova.service.jwt.models;
 
-import com.cloudova.service.user.models.User;
+import com.cloudova.service.commons.models.BaseUser;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.data.annotation.CreatedDate;
@@ -34,7 +34,7 @@ public class AuthenticationToken {
 
     @ManyToOne
     @JoinColumn(name = "created_by_id")
-    private User createdBy;
+    private BaseUser createdBy;
 
     @Override
     public boolean equals(Object o) {

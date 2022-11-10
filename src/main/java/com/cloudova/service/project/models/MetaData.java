@@ -19,10 +19,10 @@ public class MetaData {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "key")
+    @Column(name = "`key`")
     private String key;
 
-    @Column(name = "value")
+    @Column(name = "`value`")
     private String value;
 
     @Override

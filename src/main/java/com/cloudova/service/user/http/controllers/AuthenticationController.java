@@ -11,6 +11,7 @@ import com.cloudova.service.user.services.UserService;
 import com.cloudova.service.user.services.otp.OTPService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,9 +46,15 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public HttpStatusResponse<String> login(@RequestBody LoginRequest request) {
-        User userDetails = this.userService.findUserByEmailOrMobile(request.email());
-        boolean status = this.userService.validateCredentials(userDetails, request.password());
-        return new HttpStatusResponse<>(status, status ? this.jWTService.generateToken(userDetails) : null);
+        boolean status = false;
+        User userDetails = null;
+        try {
+            userDetails = this.userService.findUserByEmailOrMobile(request.email());
+            status = this.userService.validateCredentials(userDetails, request.password());
+        }catch (UsernameNotFoundException ex){
+            // Nothing
+        }
+        return new HttpStatusResponse<>(status, null, status ? this.jWTService.generateToken(userDetails) : null);
     }
 
     @PostMapping("/logout")

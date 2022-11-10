@@ -1,34 +1,32 @@
 package com.cloudova.service.project.models;
 
+import com.cloudova.service.commons.models.BaseUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
-@Table(name = "application_users")
 @Getter
 @Setter
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicationUser {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+public class ApplicationUser extends BaseUser {
 
     @Column
     private String name;
 
     @Column(unique = true)
     private String email;
+
+    @Column
+    private String password;
 
     @Column
     @Builder.Default
@@ -38,21 +36,49 @@ public class ApplicationUser {
     @Builder.Default
     private boolean banned = false;
 
-    @Column
-    private String password;
-
+    @JoinColumn
+    @OneToOne
+    @JsonIgnore
+    private Application application;
 
     @OneToMany
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private List<MetaData> metadata;
 
-    @LastModifiedDate
-    private Timestamp updatedAt;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("APP_" + this.application.getName()));
+    }
 
     @JsonIgnore
     public String getPassword() {
         return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !this.banned;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.isActive;
     }
 
     @Override
@@ -61,6 +87,14 @@ public class ApplicationUser {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         ApplicationUser user = (ApplicationUser) o;
         return id != null && Objects.equals(id, user.id);
+    }
+
+    public Map<String, Object> toHashMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.putIfAbsent("id", this.getId());
+        map.putIfAbsent("name", this.getName());
+        map.putIfAbsent("email", this.getEmail());
+        return map;
     }
 
     @Override

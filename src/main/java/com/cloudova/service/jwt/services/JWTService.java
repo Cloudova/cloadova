@@ -7,6 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.cloudova.service.jwt.models.AuthenticationToken;
+import com.cloudova.service.project.models.ApplicationUser;
 import com.cloudova.service.user.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,7 +61,6 @@ public class JWTService {
 
     public String generateToken(User userDetails) {
         AuthenticationToken refreshToken = this.accessTokenService.createAuthenticationToken(userDetails);
-        System.out.println("Values: " + userDetails.toHashMap().values());
         return JWT.create()
                 .withIssuer(this.appName)
                 .withSubject(String.valueOf(userDetails.getId()))
@@ -70,6 +70,24 @@ public class JWTService {
                 .withClaim("preferred_username", userDetails.getUsername())
                 .withClaim("name", userDetails.getName())
                 .withClaim("user", userDetails.toHashMap())
+                .withClaim("type",JWTTokenTypes.DEVELOPER_TOKEN.name())
+                .withJWTId(String.valueOf(refreshToken.getId()))
+                .sign(getAlgorithm());
+    }
+
+    public String generateTokenForApplicationUser(ApplicationUser userDetails) {
+        AuthenticationToken refreshToken = this.accessTokenService.createAuthenticationToken(userDetails);
+        return JWT.create()
+                .withIssuer(this.appName)
+                .withSubject(String.valueOf(userDetails.getId()))
+                .withIssuedAt(new Date())
+                .withExpiresAt(java.sql.Date.valueOf(LocalDate.now().plusDays(AuthenticationTokenService.tokenExpirationDays)))
+                .withClaim("refreshToken", refreshToken.getRefreshToken())
+                .withClaim("preferred_username", userDetails.getEmail())
+                .withClaim("name", userDetails.getName())
+                .withClaim("user", userDetails.toHashMap())
+                .withClaim("type",JWTTokenTypes.APPLICATION_TOKEN.name())
+                .withClaim("application", userDetails.getApplication().getSubdomain())
                 .withJWTId(String.valueOf(refreshToken.getId()))
                 .sign(getAlgorithm());
     }

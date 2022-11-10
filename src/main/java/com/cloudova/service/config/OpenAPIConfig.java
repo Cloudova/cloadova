@@ -16,7 +16,13 @@ public class OpenAPIConfig {
                 .components(new Components()
                         .addSecuritySchemes("bearer-key",
                                 new SecurityScheme().type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer").bearerFormat("JWT")));
+                                        .scheme("bearer").bearerFormat("JWT"))
+                        .addSecuritySchemes("app-id",
+                                new SecurityScheme().
+                                        type(SecurityScheme.Type.APIKEY).scheme("uuid")
+                                        .in(SecurityScheme.In.HEADER)
+                                        .name("app-id")
+                        ));
         openapi.setInfo(new Info().title("Cloudova Application Service").version("0.1.0-Beta"));
         return openapi;
     }

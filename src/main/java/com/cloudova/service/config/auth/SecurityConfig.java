@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/auth/login").permitAll()
                 .antMatchers("/api/v1/user/register").permitAll()
                 .antMatchers("/", "/assets/***").permitAll()
+                .antMatchers("/$1/api/v1").permitAll()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(this.authenticationEntryPoint)

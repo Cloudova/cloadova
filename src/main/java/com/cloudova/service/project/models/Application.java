@@ -8,9 +8,10 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
-@Table(name="applications")
+@Table(name = "applications")
 @Getter
 @Setter
 @ToString
@@ -20,9 +21,9 @@ import java.util.Set;
 public class Application {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    @Builder.Default
+    private String id = UUID.randomUUID().toString();
 
     @Column(unique = true)
     private String subdomain;
@@ -33,9 +34,14 @@ public class Application {
     @Column
     private String description;
 
-    @JoinColumn
-    @OneToOne
+    @Column
     @JsonIgnore
+    private String secret;
+
+    @JoinColumn(nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ToString.Exclude
     private User user;
 
     @JoinColumn(name = "application_id")

@@ -60,7 +60,7 @@ public class ApplicationController {
     @DeleteMapping("/{id}")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")}, summary = "Applications List")
     @Secured("delete:project")
-    public HttpStatusResponse<String> delete(@PathVariable long id) {
+    public HttpStatusResponse<String> delete(@PathVariable String id) {
         Application application = this.applicationService.getById(id).orElseThrow();
         this.applicationService.deleteApplication(application);
         return new HttpStatusResponse<>(true);
@@ -69,7 +69,7 @@ public class ApplicationController {
     @PutMapping("/{id}")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")}, summary = "Update Application")
     @Secured("update:project")
-    public HttpStatusResponse<String> update(@PathVariable long id, @Validated @RequestBody ApplicationDto applicationDto) {
+    public HttpStatusResponse<String> update(@PathVariable String id, @Validated @RequestBody ApplicationDto applicationDto) {
         Application application = this.applicationService.getById(id).orElseThrow();
         this.applicationService.updateApplication(application, applicationDto);
         return new HttpStatusResponse<>(true);

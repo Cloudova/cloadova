@@ -1,33 +1,26 @@
 package com.cloudova.service.user.models;
 
-import com.cloudova.service.config.BaseModel;
+import com.cloudova.service.commons.models.BaseUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseModel implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+public class User extends BaseUser {
 
     @Column
     private String firstName;
@@ -37,6 +30,9 @@ public class User extends BaseModel implements UserDetails {
 
     @Column(unique = true)
     private String email;
+
+    @Column
+    private String password;
 
     @Column(unique = true)
     private String mobile;
@@ -51,12 +47,6 @@ public class User extends BaseModel implements UserDetails {
     @Column
     @Builder.Default
     private boolean banned = false;
-
-    @Column
-    private String password;
-
-    @LastModifiedDate
-    private Timestamp updatedAt;
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {

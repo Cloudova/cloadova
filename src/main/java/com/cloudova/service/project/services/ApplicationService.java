@@ -6,11 +6,13 @@ import com.cloudova.service.project.dto.ApplicationDto;
 import com.cloudova.service.project.models.Application;
 import com.cloudova.service.project.repositories.ApplicationRepository;
 import com.cloudova.service.user.models.User;
+import com.cloudova.service.utils.SecureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,13 +26,14 @@ import java.util.Optional;
 public class ApplicationService {
 
     private final ApplicationRepository repository;
-
+    private final PasswordEncoder passwordEncoder;
     @Value("${restrictions.max_app_for_user}")
     private int maxAppForUser;
 
     @Autowired
-    public ApplicationService(ApplicationRepository repository) {
+    public ApplicationService(ApplicationRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Application createApplication(User user, String name, String subdomain) {
@@ -48,7 +51,6 @@ public class ApplicationService {
 
     @PreAuthorize("#application.user.id == authentication.principal.id")
     public void updateApplication(Application application, ApplicationDto dto) {
-        System.out.println(application.getUser().getId());
         if (!dto.subdomain().equals(application.getSubdomain()) && this.repository.existsBySubdomain(dto.subdomain())) {
             throw new InvalidArgumentException("Entered subdomain is taken");
         }
@@ -58,7 +60,6 @@ public class ApplicationService {
         application.setSubdomain(dto.subdomain());
         this.repository.save(application);
     }
-
 
     public Application createApplication(User user, String name, String subdomain, String description) {
         if (this.repository.countByUser_Id(user.getId()) >= this.maxAppForUser) {
@@ -73,12 +74,13 @@ public class ApplicationService {
                 .name(name)
                 .subdomain(subdomain)
                 .description(description)
+                .secret(this.passwordEncoder.encode(SecureUtils.generateRandomString(64, (token) -> true)))
                 .build();
 
         return this.repository.save(application);
     }
 
-    public Optional<Application> getById(long id) {
+    public Optional<Application> getById(String id) {
         return this.repository.findById(id);
     }
 }
