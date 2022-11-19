@@ -14,5 +14,13 @@ public interface OTPRepository extends JpaRepository<OTP, UUID> {
     )
     Optional<OTP> findByTokenAndIdentifier(@Param("token") String token, @Param("identifier") String identifier);
 
+
+    @Query(
+            "select o from OTP o where o.token = :token and o.identifier = :identifier and o.appId = :appId and o.expiresOn > current_time()"
+    )
+    Optional<OTP> findByTokenAndIdentifierForApplication(@Param("token") String token, @Param("identifier") String identifier, @Param("appId") String appId);
+
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean existsByToken(String token);
 }

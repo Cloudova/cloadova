@@ -44,6 +44,9 @@ public class OTP extends BaseModel {
     private Timestamp verifiedAt;
 
     @Column
+    private String appId;
+
+    @Column
     @Builder.Default
     private Timestamp expiresOn = Timestamp.valueOf(LocalDateTime.now().plus(2, ChronoUnit.MINUTES));
 
@@ -68,7 +71,7 @@ public class OTP extends BaseModel {
 
     public void verify() {
         if (this.isVerified) {
-            throw new InvalidOtpException("Invalid otp");
+            throw new InvalidOtpException("Otp Code is not valid: " + this.token);
         }
         this.setVerified(true);
         this.setVerifiedAt(Timestamp.valueOf(LocalDateTime.now()));

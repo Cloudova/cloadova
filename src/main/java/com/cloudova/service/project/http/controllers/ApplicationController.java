@@ -69,10 +69,9 @@ public class ApplicationController {
     @PutMapping("/{id}")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")}, summary = "Update Application")
     @Secured("update:project")
-    public HttpStatusResponse<String> update(@PathVariable String id, @Validated @RequestBody ApplicationDto applicationDto) {
+    public HttpStatusResponse<Application> update(@PathVariable String id, @Validated @RequestBody ApplicationDto applicationDto) {
         Application application = this.applicationService.getById(id).orElseThrow();
-        this.applicationService.updateApplication(application, applicationDto);
-        return new HttpStatusResponse<>(true);
+        return new HttpStatusResponse<>(true, this.applicationService.updateApplication(application, applicationDto));
     }
 
 

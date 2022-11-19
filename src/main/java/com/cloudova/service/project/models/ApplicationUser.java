@@ -20,6 +20,9 @@ import java.util.*;
 public class ApplicationUser extends BaseUser {
 
     @Column
+    protected String username;
+
+    @Column
     private String name;
 
     @Column(unique = true)
@@ -37,11 +40,12 @@ public class ApplicationUser extends BaseUser {
     private boolean banned = false;
 
     @JoinColumn
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JsonIgnore
+    @ToString.Exclude
     private Application application;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private List<MetaData> metadata;

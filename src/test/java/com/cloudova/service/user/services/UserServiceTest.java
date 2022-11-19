@@ -39,7 +39,7 @@ class UserServiceTest extends BaseTest {
     @Test
     void test_create_user() {
         String email = this.faker.internet().emailAddress();
-        this.otpService.SendOtp(email);
+        this.otpService.sendOtp(email);
         Awaitility.await().atMost(1, SECONDS).until(() -> {
             MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
             MimeMessage receivedMessage = receivedMessages[receivedMessages.length - 1];

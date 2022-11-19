@@ -15,8 +15,7 @@ public final class ApplicationHolderContext {
         return ApplicationHolderContext.application.get();
     }
 
-    public static void clear(){
+    public static void clear() {
         ApplicationHolderContext.application.remove();
     }
-
 }

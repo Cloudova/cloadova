@@ -35,7 +35,7 @@ public class AuthenticationController {
 
     @PostMapping("/otp/request")
     public OtpSent requestOtp(@Validated @RequestBody SendOtpRequest request) {
-        UUID verificationID = this.otpService.SendOtp(request.identifier());
+        UUID verificationID = this.otpService.sendOtp(request.identifier());
         return new OtpSent(true, verificationID.toString());
     }
 
@@ -62,12 +62,5 @@ public class AuthenticationController {
         this.jWTService.invokeToken(authorization.replace("Bearer ", ""));
         return new HttpStatusResponse<>(true);
     }
-
-//    @PostMapping("/otp/verify")
-//    public HttpStatusResponse<String> verifyOtp(@Validated @RequestBody VerifyOtpRequest request) {
-//        this.otpService.verifyOTP(request.identifier(), request.code());
-//        return new HttpStatusResponse<>(true, null);
-//    }
-
 
 }

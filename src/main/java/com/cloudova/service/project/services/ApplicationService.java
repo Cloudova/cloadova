@@ -50,7 +50,7 @@ public class ApplicationService {
     }
 
     @PreAuthorize("#application.user.id == authentication.principal.id")
-    public void updateApplication(Application application, ApplicationDto dto) {
+    public Application updateApplication(Application application, ApplicationDto dto) {
         if (!dto.subdomain().equals(application.getSubdomain()) && this.repository.existsBySubdomain(dto.subdomain())) {
             throw new InvalidArgumentException("Entered subdomain is taken");
         }
@@ -58,7 +58,7 @@ public class ApplicationService {
         application.setName(dto.name());
         application.setDescription(dto.description());
         application.setSubdomain(dto.subdomain());
-        this.repository.save(application);
+        return this.repository.save(application);
     }
 
     public Application createApplication(User user, String name, String subdomain, String description) {

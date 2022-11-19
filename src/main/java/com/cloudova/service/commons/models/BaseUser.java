@@ -2,6 +2,7 @@ package com.cloudova.service.commons.models;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,11 +19,14 @@ public abstract class BaseUser implements UserDetails {
     @Column(name = "id", nullable = false)
     protected Long id;
 
-    @Column(unique = true)
+    @Column
     protected String username;
 
     @LastModifiedDate
     protected Timestamp updatedAt;
+
+    @CreationTimestamp
+    protected Timestamp createdAt;
 
     @Override
     public String getUsername(){
