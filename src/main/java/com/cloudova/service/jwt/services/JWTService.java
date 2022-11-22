@@ -9,6 +9,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.cloudova.service.jwt.models.AuthenticationToken;
 import com.cloudova.service.project.models.ApplicationUser;
 import com.cloudova.service.user.models.User;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.KeyPair;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -28,18 +32,27 @@ public class JWTService {
     @Value("${app}")
     private String appName;
 
+    private final RSAKeyService rSAKeyService;
+
     @Autowired
-    public JWTService(AuthenticationTokenService accessTokenService) {
+    public JWTService(AuthenticationTokenService accessTokenService, RSAKeyService rSAKeyService) {
         this.accessTokenService = accessTokenService;
+        this.rSAKeyService = rSAKeyService;
     }
 
+    @SneakyThrows
     @Bean
     public Algorithm getAlgorithm() {
-        return Algorithm.HMAC512(this.secret);
+        KeyPair keyPair = this.rSAKeyService.getKeyPair();
+        return Algorithm.RSA256((RSAPublicKey) keyPair.getPublic(),(RSAPrivateKey) keyPair.getPrivate());
+    }
+
+    public Algorithm verificationAlgorithm(){
+        return Algorithm.RSA256((RSAPublicKey)  this.rSAKeyService.getPublicKey(),null);
     }
 
     public DecodedJWT validateJWT(String token) {
-        JWTVerifier verifier = JWT.require(getAlgorithm())
+        JWTVerifier verifier = JWT.require(verificationAlgorithm())
                 .withIssuer(this.appName)
                 .build();
         DecodedJWT decodedJWT = verifier.verify(token);
@@ -47,9 +60,12 @@ public class JWTService {
         return decodedJWT;
     }
 
+    public void getPublicKeys(){
+
+    }
+
     public void invokeToken(String token) {
-        Algorithm algorithmHS = Algorithm.HMAC512(this.secret);
-        JWTVerifier verifier = JWT.require(algorithmHS)
+        JWTVerifier verifier = JWT.require(verificationAlgorithm())
                 .withIssuer(this.appName)
                 .build();
         DecodedJWT decodedJWT = verifier.verify(token);
