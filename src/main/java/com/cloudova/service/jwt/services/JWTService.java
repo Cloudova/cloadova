@@ -27,12 +27,11 @@ import java.util.Date;
 public class JWTService {
 
     private final AuthenticationTokenService accessTokenService;
+    private final RSAKeyService rSAKeyService;
     @Value("${jwt.secret}")
     private String secret;
     @Value("${app}")
     private String appName;
-
-    private final RSAKeyService rSAKeyService;
 
     @Autowired
     public JWTService(AuthenticationTokenService accessTokenService, RSAKeyService rSAKeyService) {
@@ -44,11 +43,11 @@ public class JWTService {
     @Bean
     public Algorithm getAlgorithm() {
         KeyPair keyPair = this.rSAKeyService.getKeyPair();
-        return Algorithm.RSA256((RSAPublicKey) keyPair.getPublic(),(RSAPrivateKey) keyPair.getPrivate());
+        return Algorithm.RSA256((RSAPublicKey) keyPair.getPublic(), (RSAPrivateKey) keyPair.getPrivate());
     }
 
-    public Algorithm verificationAlgorithm(){
-        return Algorithm.RSA256((RSAPublicKey)  this.rSAKeyService.getPublicKey(),null);
+    public Algorithm verificationAlgorithm() {
+        return Algorithm.RSA256((RSAPublicKey) this.rSAKeyService.getPublicKey(), null);
     }
 
     public DecodedJWT validateJWT(String token) {
@@ -58,10 +57,6 @@ public class JWTService {
         DecodedJWT decodedJWT = verifier.verify(token);
         this.accessTokenService.findById(Long.parseUnsignedLong(decodedJWT.getId())).orElseThrow(() -> new JWTVerificationException("Token ID is invalid"));
         return decodedJWT;
-    }
-
-    public void getPublicKeys(){
-
     }
 
     public void invokeToken(String token) {
