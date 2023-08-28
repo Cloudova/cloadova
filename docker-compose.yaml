@@ -2,18 +2,18 @@ version: "3.0"
 
 services:
   app:
-    image: "cloudova/service"
+    image: "soroosh-tanzadeh/authentication-service"
     build: .
     restart: unless-stopped
     ports:
       - "80:80"
-    entrypoint: "java -jar /app/cloudova.jar"
+    entrypoint: "java -jar /app/authentication-service.jar"
     volumes:
       - "certificate:/app/certificate"
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/cloudova"
-      SPRING_DATASOURCE_USERNAME: "cloudova"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/authentication"
+      SPRING_DATASOURCE_USERNAME: "soroosh"
       SPRING_DATASOURCE_PASSWORD: "example"
       SPRING_DATASOURCE_driverClassName: "com.mysql.cj.jdbc.Driver"
     depends_on:
@@ -24,10 +24,10 @@ services:
     volumes:
       - db:/var/lib/mysql
     environment:
-      MYSQL_USER: cloudova
+      MYSQL_USER: soroosh
       MYSQL_PASSWORD: example
       MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: cloudova
+      MYSQL_DATABASE: authentication
 
 volumes:
   db: {}

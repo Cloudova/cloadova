@@ -3,8 +3,6 @@ restrictions:
   max_app_for_user: 3
   max_user_for_app: 100
   storage_limit: "150Mb"
-jwt:
-  secret: "secret"
 mail-service:
   default-email: "example@example.com"
 server:
@@ -29,7 +27,7 @@ spring:
             enable: true
             required: true
   datasource:
-    url: "jdbc:mysql://localhost:3306/cloudova"
+    url: "jdbc:mysql://localhost:3306/authentication"
     username: "root"
     password: "secret"
   jpa:

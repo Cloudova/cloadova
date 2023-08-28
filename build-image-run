@@ -1,1 +1,1 @@
-./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=cloudova/cloudova
+./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=soroosh-tanzadeh/authentication-service

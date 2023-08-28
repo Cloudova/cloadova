@@ -8,11 +8,11 @@
         <version>2.7.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.cloudova</groupId>
-    <artifactId>service</artifactId>
+    <groupId>com.soroosh</groupId>
+    <artifactId>auth</artifactId>
     <version>0.0.1</version>
     <name>service</name>
-    <description>Cloudova service</description>
+    <description>Authentication Service</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -122,14 +122,14 @@
     </dependencies>
 
     <build>
-        <finalName>cloudova</finalName>
+        <finalName>authentication-service</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <image>
-                        <name>docker.io/cloudova/${project.artifactId}:v1</name>
+                        <name>docker.io/soroosh-tanzadeh/${project.artifactId}:v1</name>
                     </image>
                     <excludes>
                         <exclude>

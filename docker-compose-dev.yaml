@@ -12,8 +12,8 @@ services:
       - "35729:35729"
     entrypoint: "sleep 1d"
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/cloudova"
-      SPRING_DATASOURCE_USERNAME: "cloudova"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/authentication"
+      SPRING_DATASOURCE_USERNAME: "soroosh"
       SPRING_DATASOURCE_PASSWORD: "example"
       SPRING_DATASOURCE_driverClassName: "com.mysql.cj.jdbc.Driver"
     depends_on:
@@ -33,10 +33,10 @@ services:
     volumes:
       - db:/var/lib/mysql
     environment:
-      MYSQL_USER: cloudova
+      MYSQL_USER: soroosh
       MYSQL_PASSWORD: example
       MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: cloudova
+      MYSQL_DATABASE: authentication
 
 volumes:
   db: {}

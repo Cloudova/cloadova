@@ -1,7 +1,4 @@
-# Cloudova Authentication Service
-
-Authentication Service for **Cloudova BaaS**.
-
+# Headless Authentication Service
 
 ## Setup Application 
 
