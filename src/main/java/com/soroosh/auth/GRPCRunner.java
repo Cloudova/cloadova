@@ -18,7 +18,7 @@ public class GRPCRunner implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) throws RuntimeException {
         Thread grpc = new Thread(() -> {
             Server server = ServerBuilder
                     .forPort(8096)
