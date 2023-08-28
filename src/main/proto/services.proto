@@ -1,0 +1,10 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.soroosh.auth.grpc;
+option  java_package = "com.soroosh.auth.grpc.services";
+
+import "dto.proto";
+
+service UserService{
+    rpc GetUserInfo(RequestUser) returns (User) {}
+}

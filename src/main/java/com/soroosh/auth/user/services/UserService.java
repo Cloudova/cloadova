@@ -30,6 +30,10 @@ public class UserService implements UserDetailsService {
         return this.repository.findByMobileOrEmail(username, username).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
     }
 
+    public User findById(long id) throws UsernameNotFoundException {
+        return this.repository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+    }
+
     public User createUser(String code, String identifier, UserDto userDto) {
         this.otpService.verifyOTP(identifier, code);
         User.UserBuilder builder = User.builder().role(Role.USER);
