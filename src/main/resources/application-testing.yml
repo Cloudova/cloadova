@@ -1,5 +1,7 @@
 app: "cloud"
-
+grpc:
+  port: 9595
+  service-access-token: "token"
 jwt:
   secret: "secret"
 mail-service:
