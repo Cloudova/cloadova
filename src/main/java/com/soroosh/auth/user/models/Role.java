@@ -13,9 +13,9 @@ public enum Role {
             "delete:user",
             "ban:user",
             "activate:user",
-            "create:project",
-            "disable:project",
-            "delete:project"
+            "create:application",
+            "disable:application",
+            "delete:application"
     ), USER(
             "ROLE_USER",
             "create:application",

@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -34,7 +36,7 @@ public class UserService implements UserDetailsService {
         return this.repository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
     }
 
-    public User createUser(String code, String identifier, UserDto userDto) {
+    public User createUserWithOtp(String code, String identifier, UserDto userDto) {
         this.otpService.verifyOTP(identifier, code);
         User.UserBuilder builder = User.builder().role(Role.USER);
         if (userDto.email() != null) {
@@ -48,6 +50,16 @@ public class UserService implements UserDetailsService {
         return this.repository.save(user);
     }
 
+    public User createUser(UserDto userDto) {
+        User.UserBuilder builder = User.builder().role(Role.USER);
+        User user = builder.firstName(userDto.firstName())
+                .email(userDto.email())
+                .mobile(userDto.mobile())
+                .lastName(userDto.lastName())
+                .password(this.passwordEncoder.encode(userDto.password())).build();
+        return this.repository.save(user);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.findUserByEmailOrMobile(username);
@@ -56,6 +68,15 @@ public class UserService implements UserDetailsService {
     public User findUserByEmailOrMobile(String mobileOrEmail) throws UsernameNotFoundException {
         return this.repository.findByMobileOrEmail(mobileOrEmail, mobileOrEmail).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
     }
+
+    public Optional<User> findByEmail(String email) {
+        return this.repository.findByEmail(email);
+    }
+
+    public Optional<User> findByMobile(String mobile) {
+        return this.repository.findByMobile(mobile);
+    }
+
 
     public boolean validateCredentials(UserDetails user, String password) {
         return this.passwordEncoder.matches(password, user.getPassword());

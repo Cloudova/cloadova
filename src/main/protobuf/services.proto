@@ -6,5 +6,6 @@ option  java_package = "com.soroosh.auth.grpc.services";
 import "dto.proto";
 
 service UserService{
-    rpc GetUserInfo(RequestUser) returns (User) {}
+  rpc GetUserInfo(RequestUser) returns (User) {}
+  rpc CreateUser(CreateUserRequest) returns (User) {}
 }

@@ -2,7 +2,7 @@ package com.soroosh.auth.project.models;
 
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="clients")

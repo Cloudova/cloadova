@@ -37,7 +37,7 @@ class UserServiceTest extends BaseTest {
     private UserService userService;
 
     @Test
-    void test_create_user() {
+    void test_create_user_withOtp() {
         String email = this.faker.internet().emailAddress();
         this.otpService.sendOtp(email);
         Awaitility.await().atMost(1, SECONDS).until(() -> {
@@ -45,7 +45,7 @@ class UserServiceTest extends BaseTest {
             MimeMessage receivedMessage = receivedMessages[receivedMessages.length - 1];
             String code = GreenMailUtil.getBody(receivedMessage).replace("Your Verification Code is: ", "");
 
-            User user = this.userService.createUser(code, email, new UserDto(
+            User user = this.userService.createUserWithOtp(code, email, new UserDto(
                     this.faker.name().firstName(),
                     this.faker.name().lastName(),
                     email,
@@ -56,6 +56,21 @@ class UserServiceTest extends BaseTest {
             Assertions.assertEquals(user.getUsername(), userDetails.getUsername());
             return true;
         });
+    }
+
+    @Test
+    void test_create_user() {
+        String email = this.faker.internet().emailAddress();
+        String mobile = this.faker.phoneNumber().phoneNumber();
+        User user = this.userService.createUser(new UserDto(
+                this.faker.name().firstName(),
+                this.faker.name().lastName(),
+                email,
+                mobile,
+                this.faker.internet().password()
+        ));
+        UserDetails userDetails = this.userService.loadUserByUsername(email);
+        Assertions.assertEquals(user.getUsername(), userDetails.getUsername());
     }
 
 }

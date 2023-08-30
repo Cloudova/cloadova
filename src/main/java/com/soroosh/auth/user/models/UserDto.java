@@ -1,10 +1,13 @@
 package com.soroosh.auth.user.models;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
+
 import java.io.Serializable;
 
+@Builder
 public record UserDto(@NotEmpty String firstName,
                       @NotEmpty String lastName,
                       @NotEmpty @Email String email,

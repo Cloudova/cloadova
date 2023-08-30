@@ -1,4 +1,5 @@
 app: "cloud"
+debug: true
 grpc:
   port: 9595
   service-access-token: "token"

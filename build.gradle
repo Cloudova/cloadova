@@ -1,0 +1,125 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.3'
+    id 'io.spring.dependency-management' version '1.1.3'
+    id "com.google.protobuf" version "0.9.4"
+    id 'org.graalvm.buildtools.native' version '0.9.24'
+    id "io.freefair.lombok" version "8.3"
+}
+
+group = 'com.soroosh'
+version = '0.0.1'
+description = 'service'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-mail:2.5.6'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+    implementation 'org.springdoc:springdoc-openapi-security:1.6.11'
+    implementation 'com.auth0:java-jwt:3.18.3'
+    implementation 'com.h2database:h2:1.4.200'
+    implementation 'org.postgresql:postgresql:42.5.0'
+    implementation 'io.grpc:grpc-netty:1.16.1'
+    implementation 'io.grpc:grpc-protobuf:1.57.2'
+    implementation 'io.grpc:grpc-stub:1.57.2'
+    implementation 'com.google.protobuf:protobuf-java:3.24.0'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation 'jakarta.mail:jakarta.mail-api:2.1.2'
+
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+
+    compileOnly 'org.springframework.boot:spring-boot-configuration-processor'
+
+    runtimeOnly 'mysql:mysql-connector-java:8.0.30'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.3'
+    testImplementation 'org.springframework.security:spring-security-test:5.7.3'
+    testImplementation 'com.icegreen:greenmail-junit5:1.6.5'
+    testImplementation 'org.awaitility:awaitility:4.2.0'
+    testImplementation 'com.github.javafaker:javafaker:1.0.2'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.28'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
+}
+
+bootJar {
+    mainClass = 'com.soroosh.auth.ServiceApplication'
+}
+
+protobuf {
+    plugins {
+        // Use the jakarta plugin instead of the javax plugin
+        javamicroprofile {
+            artifact = 'jakarta.platform:jakarta.jakartaee-api:9.1.0'
+        }
+    }
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.10.1'
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.25.0'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir 'src/main/protobuf'
+        }
+        java {
+            srcDir 'src/main/java'
+        }
+    }
+    test {
+        proto {
+            srcDir 'src/test/proto'
+        }
+    }
+}
+
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Javadoc) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

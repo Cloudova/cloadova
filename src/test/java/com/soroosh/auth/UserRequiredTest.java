@@ -45,7 +45,7 @@ public class UserRequiredTest extends BaseTest{
             MimeMessage receivedMessage = receivedMessages[receivedMessages.length - 1];
             String code = GreenMailUtil.getBody(receivedMessage).replace("Your Verification Code is: ", "");
 
-            this.user = this.userService.createUser(code, email, new UserDto(
+            this.user = this.userService.createUserWithOtp(code, email, new UserDto(
                     this.faker.name().firstName(),
                     this.faker.name().lastName(),
                     email,
