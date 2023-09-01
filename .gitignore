@@ -39,3 +39,4 @@ docker-compose-prod.yaml
 src/main/resources/application-prod.yml
 
 *.lock
+.gradle
