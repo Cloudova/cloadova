@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface ApplicationUserRepository extends JpaRepository<ApplicationUser, Long> {
     @Query(
-            "SELECT a FROM ApplicationUser a where (a.username = :username OR a.email = :username) and a.application.subdomain = :subdomain"
+            "SELECT a FROM ApplicationUser a where (a.appUsername = :username OR a.email = :username) and a.application.subdomain = :subdomain"
     )
     Optional<ApplicationUser> findByUsernameOrEmail(@Param("username") String username, @Param("subdomain") String subdomain);
 

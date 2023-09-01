@@ -36,7 +36,7 @@ public class ApplicationUserService {
                 .application(application)
                 .name(userDto.getName())
                 .email(identifier)
-                .username(userDto.getUsername())
+                .appUsername(userDto.getUsername())
                 .password(this.passwordEncoder.encode(userDto.getPassword()));
         if (userDto.getMetadata() != null) {
             user = user.metadata(userDto.getMetadata().stream().map(ApplicationUserDto.MetaDataDto::toMetaData).collect(Collectors.toList()));

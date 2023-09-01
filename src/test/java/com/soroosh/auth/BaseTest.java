@@ -1,7 +1,6 @@
 package com.soroosh.auth;
 
 import com.github.javafaker.Faker;
-import org.junit.jupiter.api.BeforeEach;
 
 public class BaseTest {
 
@@ -10,4 +9,5 @@ public class BaseTest {
     public BaseTest() {
         this.faker = new Faker();
     }
+
 }

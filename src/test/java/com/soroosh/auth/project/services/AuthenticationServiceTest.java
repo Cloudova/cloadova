@@ -39,7 +39,7 @@ class AuthenticationServiceTest extends BaseTest {
     @BeforeEach
     void setUp() {
         String email = this.faker.internet().emailAddress();
-        this.application = applicationService.createApplication(this.userService.createUser("code", email, new UserDto(
+        this.application = applicationService.createApplication(this.userService.createUserWithOtp("code", email, new UserDto(
                 this.faker.name().firstName(),
                 this.faker.name().lastName(),
                 email,

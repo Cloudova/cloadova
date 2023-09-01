@@ -41,7 +41,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public HttpStatusResponse<User> register(@Validated @RequestBody CreateUserRequest request) {
-        return new HttpStatusResponse<>(true, this.userService.createUser(request.code(), request.identifier(), request.user()));
+        return new HttpStatusResponse<>(true, this.userService.createUserWithOtp(request.code(), request.identifier(), request.user()));
     }
 
     @PostMapping("/login")
