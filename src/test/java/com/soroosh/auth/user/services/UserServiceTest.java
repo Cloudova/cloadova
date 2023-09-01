@@ -1,14 +1,15 @@
 package com.soroosh.auth.user.services;
 
 
-import com.soroosh.auth.BaseTest;
-import com.soroosh.auth.user.models.User;
-import com.soroosh.auth.user.models.UserDto;
-import com.soroosh.auth.user.services.otp.OTPService;
 import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetupTest;
+import com.soroosh.auth.BaseTest;
+import com.soroosh.auth.user.models.User;
+import com.soroosh.auth.user.models.UserDto;
+import com.soroosh.auth.user.services.otp.OTPService;
+import jakarta.mail.internet.MimeMessage;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.mail.internet.MimeMessage;
+import java.util.Optional;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -71,6 +72,56 @@ class UserServiceTest extends BaseTest {
         ));
         UserDetails userDetails = this.userService.loadUserByUsername(email);
         Assertions.assertEquals(user.getUsername(), userDetails.getUsername());
+    }
+
+    @Test
+    void test_findByEmail() {
+        String email = this.faker.internet().emailAddress();
+        String mobile = this.faker.phoneNumber().phoneNumber();
+        this.userService.createUser(new UserDto(
+                this.faker.name().firstName(),
+                this.faker.name().lastName(),
+                email,
+                mobile,
+                this.faker.internet().password()
+        ));
+
+        Optional<User> userDetails = this.userService.findByEmail(email);
+        Assertions.assertTrue(userDetails.isPresent());
+        Assertions.assertEquals(email, userDetails.get().getEmail());
+    }
+
+    @Test
+    void test_findByMobile() {
+        String email = this.faker.internet().emailAddress();
+        String mobile = this.faker.phoneNumber().phoneNumber();
+        this.userService.createUser(new UserDto(
+                this.faker.name().firstName(),
+                this.faker.name().lastName(),
+                email,
+                mobile,
+                this.faker.internet().password()
+        ));
+
+        Optional<User> userDetails = this.userService.findByMobile(mobile);
+        Assertions.assertTrue(userDetails.isPresent());
+        Assertions.assertEquals(email, userDetails.get().getEmail());
+    }
+
+    @Test
+    void test_findById() {
+        String email = this.faker.internet().emailAddress();
+        String mobile = this.faker.phoneNumber().phoneNumber();
+        User user = this.userService.createUser(new UserDto(
+                this.faker.name().firstName(),
+                this.faker.name().lastName(),
+                email,
+                mobile,
+                this.faker.internet().password()
+        ));
+
+        User userDetails = this.userService.findById(user.getId());
+        Assertions.assertEquals(email, userDetails.getEmail());
     }
 
 }

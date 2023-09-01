@@ -1,13 +1,13 @@
 package com.soroosh.auth.project.models;
 
-import com.soroosh.auth.commons.models.BaseUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.soroosh.auth.commons.models.BaseUser;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import jakarta.persistence.*;
 import java.util.*;
 
 @Entity
@@ -20,7 +20,7 @@ import java.util.*;
 public class ApplicationUser extends BaseUser {
 
     @Column
-    protected String username;
+    private String appUsername;
 
     @Column
     private String name;
@@ -60,8 +60,7 @@ public class ApplicationUser extends BaseUser {
         return this.password;
     }
 
-    @Override
-    public String getUsername() {
+    public String getAppUsername() {
         return null;
     }
 

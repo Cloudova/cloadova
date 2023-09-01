@@ -1,20 +1,19 @@
 package com.soroosh.auth;
 
+import com.icegreen.greenmail.configuration.GreenMailConfiguration;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.GreenMailUtil;
+import com.icegreen.greenmail.util.ServerSetupTest;
 import com.soroosh.auth.jwt.services.JWTService;
 import com.soroosh.auth.user.models.User;
 import com.soroosh.auth.user.models.UserDto;
 import com.soroosh.auth.user.services.UserService;
 import com.soroosh.auth.user.services.otp.OTPService;
-import com.icegreen.greenmail.configuration.GreenMailConfiguration;
-import com.icegreen.greenmail.junit5.GreenMailExtension;
-import com.icegreen.greenmail.util.GreenMailUtil;
-import com.icegreen.greenmail.util.ServerSetupTest;
+import jakarta.mail.internet.MimeMessage;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.mail.internet.MimeMessage;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 

@@ -8,11 +8,10 @@ import io.grpc.Metadata;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import jakarta.validation.Validator;
 
 import java.util.Set;
 
@@ -40,9 +39,7 @@ public class GrpcUserService extends UserServiceGrpc.UserServiceImplBase {
         Set<ConstraintViolation<UserDto>> violations = this.validator.validate(dto);
         if (!violations.isEmpty()) {
             Metadata m = new Metadata();
-            violations.forEach(v -> {
-                m.put(Metadata.Key.of(v.getPropertyPath().toString(), Metadata.ASCII_STRING_MARSHALLER), v.getMessage());
-            });
+            violations.forEach(v -> m.put(Metadata.Key.of(v.getPropertyPath().toString(), Metadata.ASCII_STRING_MARSHALLER), v.getMessage()));
             responseObserver.onError(Status.INVALID_ARGUMENT.withDescription("Invalid input")
                     .asRuntimeException(m));
             return;
@@ -91,6 +88,7 @@ public class GrpcUserService extends UserServiceGrpc.UserServiceImplBase {
                 .setFirstName(foundedUser.getFirstName())
                 .setLastName(foundedUser.getLastName())
                 .setMobile(foundedUser.getMobile())
+                .setEmail(foundedUser.getEmail())
                 .build();
         responseObserver.onNext(user);
         responseObserver.onCompleted();

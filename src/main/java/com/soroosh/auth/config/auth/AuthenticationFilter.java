@@ -4,6 +4,10 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.soroosh.auth.jwt.services.JWTService;
 import com.soroosh.auth.user.models.User;
 import com.soroosh.auth.user.services.UserService;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,10 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -41,9 +41,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         try {
             UsernamePasswordAuthenticationToken token = createToken(authorizationHeader);
             SecurityContextHolder.getContext().setAuthentication(token);
-
         } catch (com.auth0.jwt.exceptions.JWTDecodeException ex) {
-            // Nothing
+//             Nothing
         }
         filterChain.doFilter(request, response);
     }

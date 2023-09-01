@@ -30,11 +30,14 @@ public class SecurityConfig {
         return http.cors(httpSecurityCorsConfigurer -> {
                 })
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/v1/***").authenticated()
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/auth/login").permitAll()
-                        .requestMatchers("/api/v1/user/register").permitAll()
-                        .requestMatchers("/", "/assets/***").permitAll()
-                        .requestMatchers("/$1/api/v1").permitAll())
+                        .requestMatchers("/api/v1/auth/otp/request").permitAll()
+                        .requestMatchers("/api/v1/auth/register").permitAll()
+                        .requestMatchers("/$1/api/v1").permitAll()
+                        .requestMatchers("/api/v1/**").authenticated()
+                        .anyRequest().permitAll()
+                )
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(this.authenticationEntryPoint))
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class)

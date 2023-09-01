@@ -1,8 +1,10 @@
 package com.soroosh.auth;
 
+import com.soroosh.auth.commons.Env;
 import com.soroosh.auth.grpc.auth.AuthServerInterceptor;
 import com.soroosh.auth.grpc.services.GrpcUserService;
-import io.grpc.*;
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -18,9 +20,12 @@ public class GRPCRunner implements CommandLineRunner {
     private final GrpcUserService userService;
     private final AuthServerInterceptor authServerInterceptor;
 
-    public GRPCRunner(GrpcUserService userService, AuthServerInterceptor authServerInterceptor) {
+    private final Env env;
+
+    public GRPCRunner(GrpcUserService userService, AuthServerInterceptor authServerInterceptor, Env env) {
         this.userService = userService;
         this.authServerInterceptor = authServerInterceptor;
+        this.env = env;
     }
 
     @Override
@@ -32,8 +37,10 @@ public class GRPCRunner implements CommandLineRunner {
                     .addService(this.userService).build();
 
             try {
-                server.start();
-                server.awaitTermination();
+                if (!this.env.isTestingMode()) {
+                    server.start();
+                    server.awaitTermination();
+                }
             } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }

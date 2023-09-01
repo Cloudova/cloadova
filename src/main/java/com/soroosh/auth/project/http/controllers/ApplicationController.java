@@ -8,15 +8,14 @@ import com.soroosh.auth.user.models.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.constraints.Min;
 
 import static com.soroosh.auth.utils.AuthenticationUtils.getCurrentUser;
 
@@ -35,6 +34,7 @@ public class ApplicationController {
 
     @PostMapping
     @Operation(security = {@SecurityRequirement(name = "bearer-key")}, summary = "Create new application")
+    @PreAuthorize("hasAuthority('create:application')")
     public HttpStatusResponse<Application> createNewApplication(@Validated @RequestBody ApplicationDto request) {
         User user = getCurrentUser();
         Application application = this.applicationService.createApplication(user, request.name(), request.subdomain(), request.description());
@@ -43,6 +43,7 @@ public class ApplicationController {
 
     @GetMapping
     @Operation(security = {@SecurityRequirement(name = "bearer-key")}, summary = "Applications List")
+    @PreAuthorize("hasAuthority('list:application')")
     public HttpStatusResponse<Page<Application>> list(@RequestParam(name = "page", defaultValue = "1") @Min(1) int page,
                                                       @RequestParam(name = "perPage", defaultValue = "10") @Min(5) int perPage,
                                                       @RequestParam(name = "direction", defaultValue = "DESC") Sort.Direction direction,
@@ -59,7 +60,7 @@ public class ApplicationController {
 
     @DeleteMapping("/{id}")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")}, summary = "Applications List")
-    @Secured("delete:project")
+    @PreAuthorize("hasAuthority('delete:application')")
     public HttpStatusResponse<String> delete(@PathVariable String id) {
         Application application = this.applicationService.getById(id).orElseThrow();
         this.applicationService.deleteApplication(application);
@@ -68,7 +69,7 @@ public class ApplicationController {
 
     @PutMapping("/{id}")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")}, summary = "Update Application")
-    @Secured("update:project")
+    @PreAuthorize("hasAuthority('update:application')")
     public HttpStatusResponse<Application> update(@PathVariable String id, @Validated @RequestBody ApplicationDto applicationDto) {
         Application application = this.applicationService.getById(id).orElseThrow();
         return new HttpStatusResponse<>(true, this.applicationService.updateApplication(application, applicationDto));

@@ -44,12 +44,12 @@ public class ApplicationService {
         return this.repository.findByUserId(id, pageable);
     }
 
-    @PreAuthorize("#application.user.id == authentication.principal.id")
+    @PreAuthorize("#application.user.id == authentication.principal.id or hasRole('ADMIN')")
     public void deleteApplication(Application application) {
         this.repository.delete(application);
     }
 
-    @PreAuthorize("#application.user.id == authentication.principal.id")
+    @PreAuthorize("#application.user.id == authentication.principal.id or hasRole('ADMIN')")
     public Application updateApplication(Application application, ApplicationDto dto) {
         if (!dto.subdomain().equals(application.getSubdomain()) && this.repository.existsBySubdomain(dto.subdomain())) {
             throw new InvalidArgumentException("Entered subdomain is taken");

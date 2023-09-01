@@ -99,6 +99,7 @@ class ApplicationControllerTest extends UserRequiredTest {
                     JSONObject object = new JSONObject(result.getResponse().getContentAsString());
                     String id = object.getJSONObject("data").getString("id");
                     this.mockMvc.perform(delete("/api/v1/applications/" + id)
+                                    .contentType("application/json")
                                     .header("Authorization", "Bearer %s".formatted(this.token))
                             )
                             .andExpect(status().isOk());

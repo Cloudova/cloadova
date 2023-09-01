@@ -1,13 +1,14 @@
 package com.soroosh.auth.user;
 
-import com.soroosh.auth.BaseTest;
-import com.soroosh.auth.user.http.requests.CreateUserRequest;
-import com.soroosh.auth.user.models.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetupTest;
+import com.soroosh.auth.BaseTest;
+import com.soroosh.auth.user.http.requests.CreateUserRequest;
+import com.soroosh.auth.user.models.UserDto;
+import jakarta.mail.internet.MimeMessage;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -18,8 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
-import javax.mail.internet.MimeMessage;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
