@@ -2,10 +2,6 @@ app: "cloud"
 grpc:
   port: 9595
   service-access-token: "token"
-
-logging.level.org.springframework: TRACE
-logging.level.org.springframework.security: TRACE
-logging.level.org.springframework.security.web.access.ExceptionTranslationFilter: TRACE
 jwt:
   secret: "secret"
 mail-service:
@@ -15,7 +11,7 @@ spring:
     password: springboot
     username: duke
     host: 127.0.0.1
-    port: 3025 # default protocol port + 3000 as offset
+    port: 3025
     protocol: smtp
     properties:
       mail:
