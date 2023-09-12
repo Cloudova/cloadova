@@ -23,6 +23,7 @@ configurations {
 
 repositories {
     mavenLocal()
+    gradlePluginPortal()
     maven {
         url = uri('https://repo.maven.apache.org/maven2/')
     }
@@ -66,6 +67,13 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok:1.18.28'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
+}
+
+graalvmNative {
+    binaries.configureEach {
+        resources.autodetect()
+    }
+    toolchainDetection = true
 }
 
 bootJar {

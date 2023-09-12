@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface ApplicationRepository extends CrudRepository<Application, String>, PagingAndSortingRepository<Application, String> {
     boolean existsBySubdomain(String subdomain);
 
-    long countByUser_Id(Long id);
+    long countByUser_Id(String id);
 
-    Page<Application> findByUserId(Long id, Pageable pageable);
+    Page<Application> findByUserId(String id, Pageable pageable);
 }

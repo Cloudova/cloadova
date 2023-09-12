@@ -13,9 +13,7 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 11
@@ -23,9 +21,9 @@ jobs:
       with:
         java-version: '17'
         distribution: 'oracle'
-    - name: Build with Gradle
+    - name: Setup
       run: |
-        ./gradlew build
+        cp src/main/resources/application.example.yml src/main/resources/application.yml
     - name: Test with Gradle
       run: |
         ./gradlew test

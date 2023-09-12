@@ -18,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.UUID;
+
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
@@ -125,7 +127,7 @@ class GrpcUserServiceTest extends BaseTest {
     @Test
     void testGetUserInfo_UserNotFound() {
         RequestUser request = RequestUser.newBuilder()
-                .setUserId(123)
+                .setUserId(UUID.randomUUID().toString())
                 .build();
 
         StreamObserver<User> responseObserver = mock(StreamObserver.class);

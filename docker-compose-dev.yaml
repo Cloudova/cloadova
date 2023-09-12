@@ -18,17 +18,8 @@ services:
       SPRING_DATASOURCE_driverClassName: "com.mysql.cj.jdbc.Driver"
     depends_on:
       - db
-  phpmyadmin:
-    image: phpmyadmin
-    environment:
-      PMA_HOST: db
-    restart: always
-    depends_on:
-      - db
-    ports:
-      - "9999:80"
   db:
-    image: mysql
+    image: mariadb:10.5
     restart: always
     volumes:
       - db:/var/lib/mysql

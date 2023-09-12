@@ -40,7 +40,7 @@ public class ApplicationService {
         return this.createApplication(user, name, subdomain, null);
     }
 
-    public Page<Application> list(Long id, Pageable pageable) {
+    public Page<Application> list(String id, Pageable pageable) {
         return this.repository.findByUserId(id, pageable);
     }
 
