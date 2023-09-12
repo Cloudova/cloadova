@@ -5,7 +5,7 @@ package com.soroosh.auth.grpc;
 option  java_package = "com.soroosh.auth.grpc.dto";
 
 message User{
-  int64 id = 1;
+  string id = 1;
   string firstName = 2;
   string lastName = 3;
   string mobile = 4;
@@ -25,5 +25,5 @@ message UpdateUser{
 }
 
 message RequestUser {
-  int64 user_id = 1;
+  string user_id = 1;
 }

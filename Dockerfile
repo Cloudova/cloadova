@@ -3,7 +3,7 @@ FROM openjdk:17-jdk AS build
 WORKDIR /app
 
 COPY . /app
-RUN ./mvnw  -Dmaven.test.skip package
+RUN ./gradlew buildJar
 
 FROM openjdk:20-oracle
 

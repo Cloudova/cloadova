@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
         return this.repository.findByMobileOrEmail(username, username).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
     }
 
-    public User findById(long id) throws UsernameNotFoundException {
+    public User findById(String id) throws UsernameNotFoundException {
         return this.repository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
     }
 

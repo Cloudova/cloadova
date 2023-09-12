@@ -14,7 +14,7 @@ public class UserGrpcTest extends BaseTest {
         String firstName = this.faker.name().firstName();
         String lastName = this.faker.name().lastName();
         String phone = this.faker.phoneNumber().cellPhone();
-        long id = this.faker.number().randomNumber();
+        String id = UUID.randomUUID().toString();
         User user = User.newBuilder().
                 setId(id)
                 .setFirstName(firstName)
