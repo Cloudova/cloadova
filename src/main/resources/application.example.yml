@@ -1,5 +1,6 @@
 app: "cloud"
-debug: true
+logging.level.org.springframework.security: debug
+logging.level.org.springframework.security.web.access.ExceptionTranslationFilter: debug
 grpc:
   port: 9595
   service-access-token: "token"
@@ -20,6 +21,10 @@ server:
     include-stacktrace: NEVER
     include-exception: false
 spring:
+  data:
+    jdbc:
+      repositories:
+        enabled: false
   mail:
     host: "smtp.example.com"
     port: 587
@@ -33,9 +38,10 @@ spring:
             enable: true
             required: true
   datasource:
-    url: "jdbc:mysql://localhost:3306/authentication"
+    url: "jdbc:mysql://localhost:3333/authentication"
     username: "root"
-    password: "secret"
+    password: "passwd"
+    dialect: org.hibernate.dialect.MariaDB106Dialect
   jpa:
     show-sql: true
     hibernate:

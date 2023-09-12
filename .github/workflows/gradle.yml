@@ -27,9 +27,6 @@ jobs:
     - name: Test with Gradle
       run: |
         ./gradlew test
-    - name: Generate Coverage Report
-      run: |
-        ./gradlew jacocoTestReport
     - name: Upload Coverage Report
       uses: actions/upload-artifact@v2
       with:
